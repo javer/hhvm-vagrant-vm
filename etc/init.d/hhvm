@@ -1,0 +1,67 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          hhvm
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the HipHop VM web server
+# Description:       starts HipHop VM using start-stop-daemon
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+HPHP_HOME=/root/dev/hiphop-php
+DAEMON=$HPHP_HOME/hphp/hhvm/hhvm
+NAME=hhvm
+DESC="HipHop VM"
+CONFIG=/etc/hiphop/config.hdf
+PIDFILE=/var/run/$NAME.pid
+
+# Include hhvm defaults if available
+if [ -f /etc/default/hhvm ]; then
+        . /etc/default/hhvm
+fi
+
+test -x $DAEMON || exit 0
+
+set -e
+
+. /lib/lsb/init-functions
+
+test_hhvm_config() {
+	if [ ! -f "${CONFIG}" ] ; then
+		echo "Please create ${CONFIG}"
+		return 1
+	fi
+	return 0
+}
+
+case "$1" in
+	start)
+		echo -n "Starting $DESC: "
+		test_hhvm_config
+		start-stop-daemon --start --background --quiet \
+		    --pidfile $PIDFILE \
+		    --exec $DAEMON \
+		    -- -m server -c "$CONFIG" $DAEMON_OPTS || true
+		echo "$NAME."
+		;;
+
+	stop)
+		echo -n "Stopping $DESC: "
+		start-stop-daemon --stop --pidfile $PIDFILE \
+		    --exec $DAEMON || true
+		echo "$NAME."
+		;;
+
+	status)
+		status_of_proc -p $PIDFILE "$DAEMON" hhvm && exit 0 || exit $?
+		;;
+	*)
+		echo "Usage: $NAME {start|stop|status}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

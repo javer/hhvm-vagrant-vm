@@ -1,0 +1,14 @@
+server {
+    listen      *:81 default;
+    server_name hiphop.site.local;
+    root        /var/www/site/web;
+    access_log  /var/www/site/app/logs/hhvm_access.log;
+    error_log   /var/www/site/app/logs/hhvm_error.log;
+
+    location / {
+        proxy_pass  http://hhvm;
+    }
+
+    location ~* ^/[^/]+\.(txt|ico|xml)$ { }
+    location ~* ^/(assets|bundles|media)/ { }
+}

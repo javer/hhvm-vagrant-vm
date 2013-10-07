@@ -1,0 +1,279 @@
+PidFile = /var/run/hhvm.pid
+
+Eval {
+    Jit = true
+    JitWarmupRequests = 3
+}
+
+Log {
+    Level = Info
+    Header = true
+
+    UseLogFile = true
+    File = /var/log/hhvm_error.log
+
+    Access {
+        * {
+            File = /var/log/hhvm_access.log
+        }
+    }
+}
+
+Server {
+    #Host = hiphop.site.local
+    IP = 127.0.0.1
+    Port = 4247
+    ThreadCount = 10
+
+    SourceRoot = /var/www/site
+    IncludeSearchPaths {
+#        symfony = /var/www/symfony-1.4
+    }
+
+    RequestTimeoutSeconds = 30
+    RequestMemoryMaxBytes = 134217728
+
+    # Only for debugging memory problems. When turned on, server will report
+    # SmartAllocator's usage for each thread to stdout.
+    CheckMemory = false
+
+    # If ServerName is not specified for a virtual host, use prefix + this
+    # suffix to compose one
+    #DefaultServerNameSuffix = default_domain.com
+    # Forcing $_SERVER['SERVER_NAME'] to come from request header
+    ForceServerNameToHeader = false
+
+    ### startup options
+    # TakeoverFilename = filename   # for port takeover between server instances
+    # DefaultDocument = index.php
+    # StartupDocument = filename
+    # WarmupDocument = filename
+    # RequestInitFunction = function_name
+    # ThreadDocuments {
+    #     * = somedoc.php
+    #     * = another.php
+    # }
+    ErrorDocument404 = 404.php
+    FatalErrorMessage = Something went terribly wrong... Check back :)
+
+    ### shutdown options
+
+    # Graceful shutdown will try admin /stop command and it waits for number
+    # of seconds specified by GracefulShutdownWait.
+    #GracefulShutdownWait = 0   # in seconds
+
+    # Harsh shutdown looks for pid file and try to kill that process.
+    #HarshShutdown = true
+
+    # Evil shutdown kills anything listening on the server port it’s trying to grab.
+    #EvilShutdown = true
+
+    # How long to wait for dangling server to respond.
+    #DanglingWait = 0
+
+    ### HTTP settings
+
+    #GzipCompressionLevel = 3
+    #EnableMagicQuotesGpc = false
+    #EnableKeepAlive = true
+
+    # EnableEarlyFlush allows chunked encoding responses, and
+    # ForceChunkedEncoding will only send chunked encoding responses,
+    # unless client doesn’t understand.
+    #EnableEarlyFlush = true
+    #ForceChunkedEncoding = false
+
+    MaxPostSize = 65  # in MB
+
+    # LibEventSyncSend allows response packets to be sent directly from worker
+    # thread, normally resulting in faster server responses.
+    #LibEventSyncSend = true
+
+    # ResponseQueueCount specifies how many response queues to use for sending.
+    #ResponseQueueCount = 0
+
+    ### static contents
+
+    # A static content cache creates one single file from all static contents,
+    # including css, js, html, images and any other non-PHP files (or even PHP
+    # files, if CachePHPFile is turned on for compiler options). Normally this
+    # is prepared by compiler at compilation time, but it can also be prepared
+    # at run-time, if SourceRoot points to real file directory and
+    # EnableStaticContentFromDisk is true. Otherwise, use FileCache to point
+    # to the static content cache file created by the compiler.
+    #FileCache = filename
+    #EnableStaticContentCache = true
+    #EnableStaticContentFromDisk = true
+    #ExpiresActive = true
+    #ExpiresDefault = 2592000
+    #DefaultCharsetName = UTF-8
+
+    ### file access control
+
+    #SafeFileAccess = false
+    #FontPath = where to look for font files
+    #AllowedDirectories {
+    #    * = /tmp
+    #}
+    #AllowedFiles {
+    #    * = specific file to allow
+    #}
+
+    APC {
+        EnableApc = true
+
+        # There is a way to prepare APC items in dry format, serialized in
+        # binary files, and these files can be loaded (or “primed”) extremely
+        # fast at startup time. To prepare these .cpp files, check
+        # bin/apc_sample_serializer.php for one way of doing it. Once prepared,
+        # we can compiled them into .so that can be loaded through PrimeLibrary
+        # option. The loading can be done in parallel with LoadThread count of
+        # threads. Once loading is done, it can write to APC with some specified
+        # keys in CompletionKeys to tell web application about priming.
+        #PrimeLibrary = filename
+        #LoadThread = 2
+        #CompletionKeys {
+        #    * = key name
+        #}
+
+        # Recommend to use “concurrent”, the fastest with least locking.
+        # “lfu” is experimental for now and it may have bugs.
+        # When “concurrent”, LockType doesn’t matter.
+        # UseLockedRefs uses mutexes than atomic numbers for APC item’s reference
+        # counting, so it’s recommended to turn off.
+        #TableType = hash          # hash (default) | lfu | concurrent
+        #LockType = readwritelock        # readwritelock | mutex
+        #UseLockedRefs = false
+
+        # ExpireOnSets turns on item purging on expiration, and it’s only done
+        # once per PurgeFrequency of sets.
+        #ExpireOnSets = false
+        #PurgeFrequency = 4096
+
+        # These are experimental LFU settings.
+        #KeyMaturityThreshold = 20
+        #MaximumCapacity = 0
+        #KeyFrequencyUpdatePeriod = 1000  # in number of accesses
+    }
+
+    # DNS cache
+    DnsCache {
+        Enable = false
+        TTL = 600   # in seconds
+        KeyMaturityThreshold = 20
+        MaximumCapacity = 0
+        KeyFrequencyUpdatePeriod = 1000
+    }
+
+    # Light process has very little forking cost, because they are pre-forked
+    # Recommend to turn it on for faster shell command execution.
+    #LightProcessFilePrefix = ./lightprocess
+    #LightProcessCount = 0
+
+    # RTTI profiling settings. Experimental.
+    #RTTIDirectory = /tmp/
+    #EnableCliRTTI = false
+}
+
+
+VirtualHost {
+    default {
+        Disabled = false
+        #Prefix = prefix.
+        #Pattern = .*
+        PathTranslation = web/
+        #ServerName =
+        #ServerVariables {
+        #    name = value
+        #}
+
+        RewriteRules {
+            frontend {
+                pattern = ^(.*)$
+                to = app.php/$1
+                qsa = true
+                #redirect = 0   #(default: off) | 302 | 301 | other status code
+                conditions {
+                    not_script {
+                        pattern = \.php$
+                        type = request
+                        negate = true
+                    }
+                }
+            }
+        }
+    }
+}
+
+### Administration Server
+AdminServer {
+    Port = 4248
+    ThreadCount = 1
+    Password = password
+}
+
+### Static Content
+# In addition to Static Content Cache, we also support Dynamic Content Cache.
+# If static_resource.php generates identical files given the same HTTP input,
+# it can be listed under Generators, so its generated content can be cached
+# for next requests.
+#StaticFile {
+#    Extensions {
+#        bmp = image/bmp
+#    }
+#    Generators {
+#        * = static_resource.php
+#    }
+#}
+
+### Stats
+Stats = false
+Stats {
+    Web = false
+    Memory = false
+    APC = false
+    APCKey = false
+    SQL = false
+
+    #XSL = xsl filename
+    #XSLProxy = url to get the xsl file
+
+    #SlotDuration = 600  # in seconds
+    #MaxSlot = 72        # 10 minutes x 72 = 12 hours
+}
+
+### MySQL
+MySQL {
+    ReadOnly = false
+    ConnectTimeout = 1000      # in ms
+    ReadTimeout = 4000         # in ms
+    SlowQueryThreshold = 2000  # in ms, log slow queries as errors
+    # When a query takes a long time to execute on server, client has a chance
+    # to kill it to avoid extra server cost by turning on KillOnTimeout.
+    KillOnTimeout = false
+}
+
+### HTTP Monitoring
+Http {
+    DefaultTimeout = 30         # in seconds
+    SlowQueryThreshold = 5000   # in ms, log slow HTTP requests as errors
+}
+
+### Mail
+Mail {
+    SendmailPath = sendmail -t -i
+    ForceExtraParameters =
+}
+
+### Tier overwrites
+# This feature allows a machine to overwrite configurations just by matching
+# machine names with specified regex pattern. This block of configuration can
+# appear at any location of the file, even at top.
+#Tiers {
+#    * {
+#        machine = /regex pattern/
+#        overwrite {
+#            # any config settings described in this documentation
+#        }
+#    }
+#}

@@ -1,0 +1,19 @@
+server {
+    listen      *:80 default;
+    server_name site.local;
+    root        /var/www/site/web;
+    access_log  /var/www/site/app/logs/access.log;
+    error_log   /var/www/site/app/logs/error.log;
+
+    location / {
+        try_files $uri /app.php$is_args$args;
+        fastcgi_pass fpm;
+    }
+
+    location ~* ^/[^/]+\.(txt|ico|xml)$ { }
+    location ~* ^/(assets|bundles|media)/ { }
+
+    location ~* \.php$ {
+        fastcgi_pass fpm;
+    }
+}
