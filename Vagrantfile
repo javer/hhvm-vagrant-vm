@@ -7,7 +7,7 @@ VAGRANTFILE_API_VERSION = "2"
 $build_script = <<SCRIPT
 apt-get update
 
-echo Installing HipHop dependencies...
+echo Installing HHVM dependencies...
 apt-get install -y git-core cmake g++ libboost1.48-dev libmysqlclient-dev \
   libxml2-dev libmcrypt-dev libicu-dev openssl build-essential binutils-dev \
   libcap-dev libgd2-xpm-dev zlib1g-dev libtbb-dev libonig-dev libpcre3-dev \
@@ -37,16 +37,16 @@ cores=5
 mkdir -p ~/dev
 cd ~/dev
 export CMAKE_PREFIX_PATH=`pwd`
-export HPHP_HOME=`pwd`/hiphop-php
+export HPHP_HOME=`pwd`/hhvm
 
-echo Getting HipHop source-code...
-git clone git://github.com/facebook/hiphop-php.git
+echo Getting HHVM source-code...
+git clone git://github.com/facebook/hhvm.git
 
 echo Building libevent...
 git clone git://github.com/libevent/libevent.git
 cd libevent
 git checkout release-1.4.14b-stable
-cat ../hiphop-php/hphp/third_party/libevent-1.4.14.fb-changes.diff | patch -p1
+cat ../hhvm/hphp/third_party/libevent-1.4.14.fb-changes.diff | patch -p1
 ./autogen.sh
 ./configure --prefix=$CMAKE_PREFIX_PATH
 make -j$cores
@@ -79,8 +79,8 @@ make -j$cores
 make install
 cd ..
 
-echo Building HipHop...
-cd hiphop-php
+echo Building HHVM...
+cd hhvm
 cmake .
 make -j$cores
 

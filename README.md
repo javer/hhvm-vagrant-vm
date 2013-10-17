@@ -20,8 +20,8 @@ Installation
 Clone the repository:
 
 ```bash
-$ git clone https://github.com/javer/hiphop-vagrant-vm
-$ cd hiphop-vagrant-vm
+$ git clone https://github.com/javer/hhvm-vagrant-vm
+$ cd hhvm-vagrant-vm
 ```
 
 And copy your project source into this folder:
@@ -42,7 +42,7 @@ If something goes wrong (i.e. insufficient memory when compiling HHVM), you can 
 ```bash
 $ vagrant ssh
 $ sudo -s
-$ cd /root/dev/hiphop-php
+$ cd /root/dev/hhvm
 $ export CMAKE_PREFIX_PATH=`pwd`/..
 $ export HPHP_HOME=`pwd`
 $ cmake .
@@ -113,7 +113,7 @@ Information
 * Serving site using HHVM: http://127.0.0.1:9081/
 * Start nginx: `sudo /etc/init.d/nginx start`
 * Start php-fpm: `sudo /etc/init.d/php5-fpm start`
-* Start HHVM: `sudo /etc/init.d/hhvm restart`
+* Start HHVM: `sudo /etc/init.d/hhvm start`
 
 Updating
 --------

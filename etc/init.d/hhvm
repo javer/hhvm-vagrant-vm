@@ -11,11 +11,11 @@
 ### END INIT INFO
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-HPHP_HOME=/root/dev/hiphop-php
+HPHP_HOME=/root/dev/hhvm
 DAEMON=$HPHP_HOME/hphp/hhvm/hhvm
 NAME=hhvm
 DESC="HipHop VM"
-CONFIG=/etc/hiphop/config.hdf
+CONFIG=/etc/hhvm/config.hdf
 PIDFILE=/var/run/$NAME.pid
 
 # Include hhvm defaults if available
