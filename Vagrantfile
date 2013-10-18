@@ -101,7 +101,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "4"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
-    vb.customize ["modifyvm", :id, "--hwvirtexexcl", "on"]
     vb.customize ["modifyvm", :id, "--nestedpaging", "on"]
   end
 
