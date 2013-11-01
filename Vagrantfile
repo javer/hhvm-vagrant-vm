@@ -15,7 +15,17 @@ apt-get install -y git-core cmake g++ libboost1.48-dev libmysqlclient-dev \
   libboost-program-options1.48-dev libboost-filesystem1.48-dev wget memcached \
   libreadline-dev libncurses-dev libmemcached-dev libbz2-dev \
   libc-client2007e-dev php5-mcrypt php5-imagick libgoogle-perftools-dev \
-  libcloog-ppl0 libelf-dev libdwarf-dev subversion
+  libcloog-ppl0 libelf-dev libdwarf-dev subversion python-software-properties
+
+echo Upgrading gcc to 4.7
+add-apt-repository ppa:ubuntu-toolchain-r/test
+apt-get update
+apt-get install -y gcc-4.7 g++-4.7
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 60 \
+                    --slave /usr/bin/g++ g++ /usr/bin/g++-4.7
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 40 \
+                    --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+update-alternatives --set gcc /usr/bin/gcc-4.7
 
 echo Installing nginx, php and other useful tools...
 apt-get install -y nginx-full \
@@ -81,6 +91,7 @@ cd ..
 
 echo Building HHVM...
 cd hhvm
+git submodule update --init
 cmake .
 make -j$cores
 
