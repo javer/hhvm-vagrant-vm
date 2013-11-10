@@ -111,6 +111,7 @@ Information
 * Virtual Machine user/password: vagrant/vagrant
 * Serving site using PHP: http://127.0.0.1:9080/
 * Serving site using HHVM: http://127.0.0.1:9081/
+* SSH into your vm using your favorite ssh client: ssh://127.0.0.1:2222 (username+password: "vagrant")
 * Start nginx: `sudo /etc/init.d/nginx start`
 * Start php-fpm: `sudo /etc/init.d/php5-fpm start`
 * Start HHVM: `sudo /etc/init.d/hhvm start`
