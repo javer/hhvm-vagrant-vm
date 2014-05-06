@@ -9,7 +9,7 @@ apt-get update
 
 echo Installing HHVM dependencies...
 apt-get install -y git-core cmake g++ libboost1.48-dev libmysqlclient-dev \
-  libxml2-dev libmcrypt-dev libicu-dev openssl build-essential binutils-dev \
+  libxml2-dev libxslt1-dev libmcrypt-dev libicu-dev openssl build-essential binutils-dev \
   libcap-dev libgd2-xpm-dev zlib1g-dev libtbb-dev libonig-dev libpcre3-dev \
   autoconf libtool libcurl4-openssl-dev libboost-regex1.48-dev libboost-system1.48-dev \
   libboost-program-options1.48-dev libboost-filesystem1.48-dev libboost-thread1.48-dev \
