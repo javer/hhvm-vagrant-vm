@@ -1,10 +1,10 @@
-HipHop-Vagrant-VM
+HHVM-Vagrant-VM
 =================
 
 Description
 -----------
 
-Setup a test environment for HipHop VM.
+Setup a test environment for [HHVM](https://github.com/facebook/hhvm).
 
 The final VM will contain HHVM, Nginx, PHP, MySQL, ab.
 
@@ -12,7 +12,7 @@ Requirements
 ------------
 
 * [VirtualBox](https://www.virtualbox.org)
-* [Vagrant 1.2.x](http://vagrantup.com)
+* [Vagrant 1.2+](http://vagrantup.com)
 
 Installation
 ------------
@@ -44,9 +44,7 @@ $ vagrant ssh
 $ sudo -s
 $ cd /root/dev/hhvm
 $ export CMAKE_PREFIX_PATH=`pwd`/..
-$ export HPHP_HOME=`pwd`
-$ cmake .
-$ make -j5
+$ make -j3
 ```
 
 Once everything is done you can log into the virtual machine, setup your project in /var/www/site folder:

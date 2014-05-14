@@ -22,7 +22,8 @@ Log {
 Server {
     #Host = hiphop.site.local
     IP = 127.0.0.1
-    Port = 4247
+    Port = 9000
+    Type = fastcgi
     ThreadCount = 10
 
     SourceRoot = /var/www/site
@@ -32,10 +33,6 @@ Server {
 
     RequestTimeoutSeconds = 30
     RequestMemoryMaxBytes = 134217728
-
-    # Only for debugging memory problems. When turned on, server will report
-    # SmartAllocator's usage for each thread to stdout.
-    CheckMemory = false
 
     # If ServerName is not specified for a virtual host, use prefix + this
     # suffix to compose one
@@ -176,41 +173,12 @@ Server {
 }
 
 
-VirtualHost {
-    default {
-        Disabled = false
-        #Prefix = prefix.
-        #Pattern = .*
-        PathTranslation = web/
-        #ServerName =
-        #ServerVariables {
-        #    name = value
-        #}
-
-        RewriteRules {
-            frontend {
-                pattern = ^(.*)$
-                to = app.php/$1
-                qsa = true
-                #redirect = 0   #(default: off) | 302 | 301 | other status code
-                conditions {
-                    not_script {
-                        pattern = \.php$
-                        type = request
-                        negate = true
-                    }
-                }
-            }
-        }
-    }
-}
-
 ### Administration Server
-AdminServer {
-    Port = 4248
-    ThreadCount = 1
-    Password = password
-}
+#AdminServer {
+#    Port = 4248
+#    ThreadCount = 1
+#    Password = password
+#}
 
 ### Static Content
 # In addition to Static Content Cache, we also support Dynamic Content Cache.
@@ -231,8 +199,6 @@ Stats = false
 Stats {
     Web = false
     Memory = false
-    APC = false
-    APCKey = false
     SQL = false
 
     #XSL = xsl filename

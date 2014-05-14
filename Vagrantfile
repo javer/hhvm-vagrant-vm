@@ -8,14 +8,14 @@ $build_script = <<SCRIPT
 apt-get update
 
 echo Installing HHVM dependencies...
-apt-get install -y git-core cmake g++ libboost1.48-dev libmysqlclient-dev \
+apt-get install -y git-core cmake g++ libmysqlclient-dev \
   libxml2-dev libmcrypt-dev libicu-dev openssl build-essential binutils-dev \
   libcap-dev libgd2-xpm-dev zlib1g-dev libtbb-dev libonig-dev libpcre3-dev \
-  autoconf libtool libcurl4-openssl-dev libboost-regex1.48-dev libboost-system1.48-dev \
-  libboost-program-options1.48-dev libboost-filesystem1.48-dev libboost-thread1.48-dev \
+  autoconf automake libtool libcurl4-openssl-dev \
   wget memcached libreadline-dev libncurses-dev libmemcached-dev libbz2-dev \
   libc-client2007e-dev php5-mcrypt php5-imagick libgoogle-perftools-dev \
-  libcloog-ppl0 libelf-dev libdwarf-dev subversion python-software-properties
+  libcloog-ppl0 libelf-dev libdwarf-dev subversion python-software-properties \
+  libmagickwand-dev libxslt1-dev ocaml-native-compilers libevent-dev
 
 echo Upgrading gcc to 4.7
 add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -26,6 +26,13 @@ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 60 \
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 40 \
                     --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
 update-alternatives --set gcc /usr/bin/gcc-4.7
+
+echo Installing Boost 1.49
+add-apt-repository ppa:mapnik/boost
+apt-get update
+apt-get install -y libboost1.49-dev libboost-regex1.49-dev \
+  libboost-system1.49-dev libboost-program-options1.49-dev \
+  libboost-filesystem1.49-dev libboost-thread1.49-dev
 
 echo Installing nginx, php and other useful tools...
 apt-get install -y nginx-full \
@@ -43,25 +50,13 @@ mkdir -p /var/www/site/web
 mkdir -p /var/www/site/app/logs
 chown -R vagrant:vagrant /var/www
 
-cores=5
+cores=3
 mkdir -p ~/dev
 cd ~/dev
 export CMAKE_PREFIX_PATH=`pwd`
-export HPHP_HOME=`pwd`/hhvm
 
 echo Getting HHVM source-code...
 git clone git://github.com/facebook/hhvm.git
-
-echo Building libevent...
-git clone git://github.com/libevent/libevent.git
-cd libevent
-git checkout release-1.4.14b-stable
-cat ../hhvm/hphp/third_party/libevent-1.4.14.fb-changes.diff | patch -p1
-./autogen.sh
-./configure --prefix=$CMAKE_PREFIX_PATH
-make -j$cores
-make install
-cd ..
 
 echo Building libCurl...
 git clone git://github.com/bagder/curl.git
@@ -80,10 +75,10 @@ make -j$cores
 make install
 cd ..
 
-echo Building JEMalloc 3.0...
-wget http://www.canonware.com/download/jemalloc/jemalloc-3.0.0.tar.bz2
-tar xjvf jemalloc-3.0.0.tar.bz2
-cd jemalloc-3.0.0
+echo Building JEMalloc 3.x...
+wget http://www.canonware.com/download/jemalloc/jemalloc-3.5.1.tar.bz2
+tar xjvf jemalloc-3.5.1.tar.bz2
+cd jemalloc-3.5.1
 ./configure --prefix=$CMAKE_PREFIX_PATH
 make -j$cores
 make install
@@ -91,7 +86,7 @@ cd ..
 
 echo Building HHVM...
 cd hhvm
-git submodule update --init
+git submodule update --init --recursive
 cmake .
 make -j$cores
 

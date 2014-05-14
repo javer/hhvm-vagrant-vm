@@ -6,9 +6,14 @@ server {
     error_log   /var/www/site/app/logs/hhvm_error.log;
 
     location / {
-        proxy_pass  http://hhvm;
+        try_files $uri /app.php$is_args$args;
+        fastcgi_pass hhvm;
     }
 
     location ~* ^/[^/]+\.(txt|ico|xml)$ { }
     location ~* ^/(assets|bundles|media)/ { }
+
+    location ~* \.php$ {
+        fastcgi_pass hhvm;
+    }
 }
