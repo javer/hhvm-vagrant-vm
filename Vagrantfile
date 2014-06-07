@@ -17,15 +17,15 @@ apt-get install -y git-core cmake g++ libmysqlclient-dev \
   libcloog-ppl0 libelf-dev libdwarf-dev subversion python-software-properties \
   libmagickwand-dev libxslt1-dev ocaml-native-compilers libevent-dev
 
-echo Upgrading gcc to 4.7
+echo Upgrading gcc to 4.8
 add-apt-repository ppa:ubuntu-toolchain-r/test
 apt-get update
-apt-get install -y gcc-4.7 g++-4.7
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 60 \
-                    --slave /usr/bin/g++ g++ /usr/bin/g++-4.7
+apt-get install -y gcc-4.8 g++-4.8
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 \
+                    --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 40 \
                     --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
-update-alternatives --set gcc /usr/bin/gcc-4.7
+update-alternatives --set gcc /usr/bin/gcc-4.8
 
 echo Installing Boost 1.49
 add-apt-repository ppa:mapnik/boost
