@@ -56,10 +56,10 @@ cd ~/dev
 export CMAKE_PREFIX_PATH=`pwd`
 
 echo Getting HHVM source-code...
-git clone git://github.com/facebook/hhvm.git
+git clone git://github.com/facebook/hhvm.git --depth=1
 
 echo Building libCurl...
-git clone git://github.com/bagder/curl.git
+git clone git://github.com/bagder/curl.git --depth=1
 cd curl
 ./buildconf
 ./configure --prefix=$CMAKE_PREFIX_PATH
