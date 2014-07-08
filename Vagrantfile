@@ -41,6 +41,7 @@ apt-get install -y nginx-full \
   unzip apache2-utils
 cp -R /vagrant/etc/* /etc/
 chmod +x /etc/init.d/hhvm
+mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.dist
 
 echo Initializing site
 mkdir -p /var/www
