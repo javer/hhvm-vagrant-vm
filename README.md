@@ -20,7 +20,7 @@ Installation
 Clone the repository:
 
 ```bash
-$ git clone https://github.com/javer/hhvm-vagrant-vm
+$ git clone https://github.com/javer/hhvm-vagrant-vm --depth=1
 $ cd hhvm-vagrant-vm
 ```
 
