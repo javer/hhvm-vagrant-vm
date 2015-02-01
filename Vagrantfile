@@ -15,7 +15,7 @@ apt-get install -y git-core cmake g++ libmysqlclient-dev \
   wget memcached libreadline-dev libncurses-dev libmemcached-dev libbz2-dev \
   libc-client2007e-dev php5-mcrypt php5-imagick libgoogle-perftools-dev \
   libcloog-ppl0 libelf-dev libdwarf-dev subversion python-software-properties \
-  libmagickwand-dev libxslt1-dev ocaml-native-compilers libevent-dev
+  libmagickwand-dev libxslt1-dev ocaml-native-compilers libevent-dev gawk
 
 echo Upgrading gcc to 4.8
 add-apt-repository ppa:ubuntu-toolchain-r/test
